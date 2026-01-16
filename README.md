@@ -1,2 +1,2 @@
 # Python-presentation
-Python project
+_A private project for presenting course assignments._
