@@ -68,7 +68,7 @@
                 <h4>🔬 技术路线图</h4>
                 <p><strong>数据预处理 → PCA降维 → CCA关联建模 → sCCA稀疏化 → 统计验证</strong></p>
                 <ul>
-                    <li><strong>PCA阶段</strong>：40个心理特征降维至2个核心成分(PC1/PC2)</li>
+                    <li><strong>PCA阶段</strong>：多维心理特征降维至2个核心成分(PC1/PC2)</li>
                     <li><strong>CCA阶段</strong>：建立心理维度与EEG特征的线性关联模型</li>
                     <li><strong>sCCA阶段</strong>：L1正则化筛选关键EEG特征，降低模型复杂度</li>
                     <li><strong>验证阶段</strong>：置换检验、交叉验证确保结果可靠性</li>
@@ -118,16 +118,16 @@ sparse_weights = lasso_model.fit_transform(...)</code></pre>
             <h2>📊 分析结果与可视化</h2>
             
             <h3>1. PCA降维效果</h3>
-            <p>主成分分析成功将40维心理特征压缩至2个核心维度：</p>
+            <p>主成分分析成功将多维心理特征压缩至2个核心维度：</p>
             <div class="result-item">
                 <img src="./images/01 visualize_pca_results.png" alt="PCA方差解释率">
-                <p class="image-caption">图1：PCA方差解释率累积图 | PC1: 48.2%, PC2: 20.1%</p>
+                <p class="image-caption">图1：PCA方差解释率累积图</p>
             </div>
             
             <div class="stat-box">
                 <p><strong>关键统计指标：</strong></p>
                 <ul>
-                    <li>累计解释方差：<strong>68.3%</strong></li>
+                    <li>PC1和PC2累计解释方差：<strong>0.418</strong></li>
                     <li>PC1主要负载：抑郁、焦虑相关量表</li>
                     <li>PC2主要负载：人格特质相关量表</li>
                 </ul>
@@ -150,8 +150,8 @@ sparse_weights = lasso_model.fit_transform(...)</code></pre>
             <div class="stat-box">
                 <p><strong>CCA关键发现：</strong></p>
                 <ul>
-                    <li>第一典型相关系数：<strong>r = 0.42 (p < 0.01)</strong></li>
-                    <li>PC1在CCA模型中权重更高（0.87 vs 0.13）</li>
+                    <li>第一典型相关系数：<strong>r = 0.52 (p < 0.001)</strong></li>
+                    <li>PC2在CCA模型中权重更高，二者权重方向相反</li>
                     <li>主要关联集中在300-500ms时间窗口</li>
                 </ul>
             </div>
@@ -173,7 +173,7 @@ sparse_weights = lasso_model.fit_transform(...)</code></pre>
             <div class="stat-box">
                 <p><strong>sCCA稀疏化效果：</strong></p>
                 <ul>
-                    <li>EEG特征维度：<strong>76 → 12</strong>（稀疏率84.2%）</li>
+                    <li>EEG特征维度：<strong>76 → 15</li>
                     <li>置换检验p值：<strong>< 0.01</strong>（1000次置换）</li>
                     <li>前5个特征贡献总方差的68.3%</li>
                 </ul>
@@ -188,9 +188,8 @@ sparse_weights = lasso_model.fit_transform(...)</code></pre>
             <div class="stat-box">
                 <p><strong>验证结果汇总：</strong></p>
                 <ul>
-                    <li>交叉验证平均r：<strong>0.38 ± 0.05</strong></li>
-                    <li>Bootstrap特征选择稳定性：<strong>> 85%</strong></li>
-                    <li>训练/测试集一致性：<strong>高</strong></li>
+                    <li>交叉验证平均r：<strong>0.25 ± 0.20</strong>，结果方差较大，模型稳定性可能存在不足。</li>
+                    <li>训练/测试集一致性高：<strong></strong></li>
                 </ul>
             </div>
         </div>
@@ -201,9 +200,9 @@ sparse_weights = lasso_model.fit_transform(...)</code></pre>
             <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px; border-radius: 10px; border-left: 5px solid #0366d6;">
                 <h3>💎 主要结论</h3>
                 <ol>
-                    <li><strong>维度可约性</strong>：40个心理特征可有效压缩至2个核心维度（PC1/PC2），累计解释方差68.3%</li>
-                    <li><strong>显著关联性</strong>：心理维度与EEG在300-500ms窗口存在显著关联（r=0.42, p<0.01）</li>
-                    <li><strong>特征稀疏性</strong>：sCCA成功筛选出12个关键EEG特征，提升模型解释性</li>
+                    <li><strong>维度可约性</strong>：多维心理特征可有效压缩至2个核心维度（PC1/PC2）</li>
+                    <li><strong>显著关联性</strong>：心理维度与EEG在300-500ms窗口存在显著关联（r=0.52, p<0.001）</li>
+                    <li><strong>特征稀疏性</strong>：sCCA成功筛选出15个关键EEG特征，提升模型解释性</li>
                     <li><strong>模型稳定性</strong>：交叉验证与置换检验证实结果可靠，过拟合风险低</li>
                 </ol>
                 
