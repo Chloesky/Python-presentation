@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理问卷与脑电数据多模态分析</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #24292e;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f8fa;
+        }
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .header .excerpt {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .tag {
+            background: #f1f8ff;
+            border: 1px solid #d1d5da;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 0.9em;
+            color: #0366d6;
+        }
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .tech {
+            background: #f0f0f0;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #6a737d;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eaecef;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        pre {
+            background: #f6f8fa;
+            border-radius: 6px;
+            padding: 16px;
+            overflow: auto;
+            font-size: 0.9em;
+            border: 1px solid #e1e4e8;
+        }
+        code {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        }
+        .image-caption {
+            text-align: center;
+            color: #6a737d;
+            font-style: italic;
+            margin-top: -10px;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin: 40px 0;
+        }
+        @media (max-width: 768px) {
+            .markdown-body {
+                padding: 20px;
+            }
+            .header {
+                padding: 30px 15px;
+            }
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>心理问卷与脑电数据的多模态关联分析</h1>
+        <p class="excerpt">结合PCA和CCA方法，探索心理问卷特征与脑电数据在300-500ms时间窗口的关联模式</p>
+        <div class="project-meta">
+            <div>项目类型：数据分析</div>
+            <div>日期：2025-12-30</div>
+        </div>
+    </div>
+    
+    <div class="markdown-body">
+        <div class="tags">
+            <span class="tag">PCA</span>
+            <span class="tag">CCA</span>
+            <span class="tag">EEG分析</span>
+            <span class="tag">心理测量</span>
+            <span class="tag">多模态分析</span>
+        </div>
+        
+        <div class="tech-stack">
+            <span class="tech">Python</span>
+            <span class="tech">Scikit-learn</span>
+            <span class="tech">Pandas</span>
+            <span class="tech">Matplotlib</span>
+            <span class="tech">Seaborn</span>
+        </div>
+        
+        <div class="section">
+            <h2>📊 项目背景</h2>
+            <p>本研究旨在探索心理问卷数据与脑电信号(EEG)之间的关联模式。通过主成分分析(PCA)对40个心理量表特征进行降维，提取核心心理维度(PC1和PC2)，并进一步使用典型相关分析(CCA)研究这些心理维度与脑电数据在300-500ms时间窗口的关联性。</p>
+        </div>
+        
+        <div class="section">
+            <h2>⚙️ 核心实现</h2>
+            
+            <h3>1. 数据预处理</h3>
+            <pre><code>def clean_dataframe(df):
+    # 选择需要清洗的列
+    columns_to_clean = ['BDI', 'BAI', 'Neuroticism', ...] 
+    
+    # 处理ID列格式
+    df['ID'] = df['ID'].astype(str).str.extract(r'(\d+)')[0]
+    
+    # 数值转换与缺失值处理
+    for col in existing_columns:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+    
+    return df.dropna(subset=existing_columns)</code></pre>
+            
+            <h3>2. PCA分析实现</h3>
+            <pre><code>def perform_pca_analysis(df, pca_columns, n_components=None):
+    # 数据标准化
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    
+    # 执行PCA
+    pca = PCA(n_components=n_components)
+    pca_scores = pca.fit_transform(X_scaled)
+    
+    # 计算载荷矩阵
+    loadings = pca.components_.T * np.sqrt(pca.explained_variance_)
+    
+    return {
+        'scores': pd.DataFrame(pca_scores, columns=[f'PC{i+1}' for i in range(pca_scores.shape[1])]),
+        'loadings': pd.DataFrame(loadings, index=existing_columns, columns=[f'PC{i+1}' for i in range(loadings.shape[1])]),
+        'explained_variance': pca.explained_variance_ratio_
+    }</code></pre>
+            
+            <h3>3. CCA关联分析</h3>
+            <pre><code># 提取EEG特征(300-500ms时间窗口)
+def extract_feature(file, subjects, time_window):
+    T = pd.read_excel(file, dtype={0: str})
+    T.iloc[:, 0] = T.iloc[:, 0].str.strip()
+    times = T.columns[1:].astype(str).str.replace("[−–—]", "-", regex=True).astype(float)
+    tidx = np.where((times >= time_window[0]) & (times <= time_window[1]))[0]
+    return np.nanmean(T.iloc[:, 1:].to_numpy()[:, tidx], axis=1)
+
+# 执行CCA分析
+cca = CCA(n_components=2)
+U, V = cca.fit_transform(X_pca, Y_pca)</code></pre>
+        </div>
+        
+        <div class="section">
+            <h2>📈 分析结果</h2>
+            
+            <h3>1. PCA分析结果</h3>
+            <p>前两个主成分(PC1和PC2)累计解释方差达68.3%，成功提取了问卷数据的核心维度：</p>
+            <img src="./images/pca_variance.png" alt="PCA方差解释率">
+            <p class="image-caption">图1：PCA方差解释率累积图</p>
+            
+            <h3>2. 脑电ERP波形</h3>
+            <p>在300-500ms时间窗口观察到明显的ERP成分，不同脑区对药物/中性刺激的反应模式存在差异：</p>
+            <img src="./images/erp_waveforms.png" alt="ERP波形图">
+            <p class="image-caption">图2：脑电ERP波形在不同脑区的对比</p>
+            
+            <h3>3. CCA关联分析</h3>
+            <p>发现心理问卷的PC1与脑电特征存在显著关联(r=0.42, p<0.01)：</p>
+            <img src="./images/scca_scatter.png" alt="sCCA散点图">
+            <p class="image-caption">图3：CCA散点图展示心理维度与脑电特征的关联</p>
+            
+            <p>置换检验验证了结果的统计显著性：</p>
+            <img src="./images/scca_permutation.png" alt="置换检验">
+            <p class="image-caption">图4：置换检验验证CCA结果的统计显著性</p>
+        </div>
+        
+        <div style="margin-top: 50px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #0366d6;">
+            <h3>💡 项目总结</h3>
+            <p>本项目通过PCA-CCA多模态分析方法，成功发现了心理问卷特征与脑电信号在特定时间窗口的关联模式，为心理生理学研究提供了新的数据分析框架。</p>
+        </div>
+    </div>
+</body>
+</html>
